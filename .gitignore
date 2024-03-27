@@ -191,3 +191,11 @@ bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/sacapi.iml
+/.idea/vcs.xml
+/.idea/compiler.xml
+/.idea/jarRepositories.xml
+/.idea/modules/sacapi.main.iml
+/.idea/modules/sacapi.test.iml
