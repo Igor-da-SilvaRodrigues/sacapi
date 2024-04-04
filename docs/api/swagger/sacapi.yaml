@@ -1,0 +1,583 @@
+openapi: 3.0.3
+info:
+  title: SAC - OpenAPI 3.0
+  description: Documentação da API do Sistema Acadêmico de Chamados
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: rodriguessigor2@gmail.com
+  version: 1.0.0
+servers:
+  - url: http://localhost/sac/api/ #mudar para a url do railway
+tags:
+  - name: Usuario
+    description: Operações com usuários
+
+  - name: Setor
+    description: Operações com setores
+    
+  - name: Historico
+    description: Operações com históricos
+    
+  - name: Chamado
+    description: Operações com chamados
+  
+  - name: TipoChamado
+    description: Operações com tipos de chamadoss
+  
+  - name: Autenticação
+    description: Operações de Autenticação
+paths:
+  /usuario:
+    get:
+      security:
+        - sacAuth: []
+      tags:
+        - Usuario
+      summary: Retorna todos os usuarios
+      description: Retorna todos os usuarios em uma lista de objetos
+      operationId: findAllUsuarios
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/UsuarioFulanoGet'          
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /usuario/{idUsuario}:
+    get:
+      security:
+        - sacAuth: []
+      tags:
+        - Usuario
+      summary: Retorna informações de um único usuário
+      description: Retorna informações de um único usuário, recebe a matrícula do usuário como parâmetro de URL
+      operationId: findUsuarioById
+      parameters:
+        - name: idUsuario
+          in: path
+          description: Matrícula do usuário
+          required: true
+          schema:
+            type: string
+            example: ABZX
+      responses:
+        '200':
+          description: sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsuarioFulanoGet'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Usuário não encontrado
+          
+          
+  
+  /setor:
+    get:
+      tags:
+        - Setor
+      summary: Retorna todos os setores
+      description: Retorna todos os setores na forma de uma lista de objetos
+      operationId: findAllSetores
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SetorGet'          
+            
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - sacAuth: []
+        
+  /historico/{protocolo}:
+    get:
+      tags:
+        - Historico
+      summary: Retorna todos os históricos de um chamado
+      description: Retorna todos os históricos de um chamado como uma lista de objetos
+      operationId: findHistoricosByChamado
+      parameters:
+        - name: protocolo
+          in: path
+          description: numero de protocolo do chamado
+          required: true
+          schema:
+            type: string
+            example: 49029304290-d
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HistoricoGet'          
+            
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: chamado com o protocolo informado não encontrado
+      security:
+        - sacAuth: []
+        
+        
+  
+  /chamado:
+    post:
+      tags:
+        - Chamado
+      summary: Cria (abre) um chamado
+      description: ''
+      operationId: createChamado
+      requestBody:
+        description: o usuario a ser criado
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChamadoPost'
+      responses:
+        '200':
+          description: Sucesso
+        '400':
+          description: Entrada incorreta
+      security:
+        - sacAuth: []
+        
+    put:
+      tags:
+        - Chamado
+      summary: Atualiza um chamado
+      description: Atualiza um chamado aberto por um usuario.
+      operationId: updateChamado
+      requestBody:
+        description: informação sobre o chamado a ser atualizado. 'idUsuario' é a matrícula do administrador que está fazendo a alteração, 'protocolo' identificam o chamado a ser atualizado. Os outros atributos são opcionais e indicam as atualizações requisitadas. Se eles não forem fornecidos, o atributo correspondente não será atualizado.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChamadoPut'
+      responses:
+        '200':
+          description: Sucesso
+        '400':
+          description: Entrada incorreta
+        '404':
+          description: Usuario, chamado ou setor não encontrados
+        '401':
+          description: Tokende acesso/sessão não presente ou inválido ou o usuário não é um administrador
+    get:
+      tags:
+        - Chamado
+      summary: Retorna todos os chamados
+      description: Este *endpoint* foi pensado para ser usado pelo administrador, e não possui informações muito úteis para um discente. use /chamado/usuario/{idUsuario} para resgatar informações relevantes para discentes
+      operationId: getAllChamados
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChamadoGetAdmin'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+          
+  
+  /chamado/{idChamado}:
+    get:
+      tags:
+        - Chamado
+      summary: Retorna as informações de um chamado específico
+      description: ''
+      operationId: getChamadoById
+      parameters:
+      - name: idChamado
+        in: path
+        description: numero de protocolo do chamado
+        required: true
+        schema:
+          type: string
+          example: 93990249a
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChamadoGet'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Chamado não encontrado
+    
+  /chamado/usuario/{idUsuario}:
+    get:
+      tags:
+        - Chamado
+      summary: Retorna todos os chamados de um usuario
+      description: Retorna todos os chamados de um discente como uma lista de objetos. Assim como o respectivo histórico inicial.
+      operationId: getAllChamadosByUsuario
+      parameters:
+      - name: idUsuario
+        in: path
+        description: matricula do usuario
+        required: true
+        schema:
+          type: string
+          example: OIEMSDAF
+        
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChamadoGetDiscente'          
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Usuário não encontrado
+      security:
+        - sacAuth: []
+        
+  
+  /tipochamado:
+    post:
+      tags:
+        - TipoChamado
+      summary: Cria um novo tipo de chamado
+      description: ''
+      operationId: createTipoChamado
+      requestBody:
+        description: o tipo de chamado a ser criado
+        required: true
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/TipoChamadoPost'
+              
+      responses:
+        '200':
+          description: Sucesso
+        '400':
+          description: Entrada incorreta
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - sacAuth: []
+    
+    get:
+      tags:
+        - TipoChamado
+      summary: Retorna todos os tipos de chamados
+      description: Retorna todos os tipos de chamados como uma lista de objetos
+      operationId: findAllTipoChamado
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TipoChamadoGet'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - sacAuth: []
+  
+  
+  /tipochamado/{idTipoChamado}:
+    delete:
+      tags:
+        - TipoChamado
+      summary: Arquiva um tipo de chamado
+      description: Arquiva um tipo de chamado para que ele não esteja mais disponível para escolha
+      operationId: deleteTipoChamado
+      parameters:
+      - name: idTipoChamado
+        in: path
+        required: true
+        description: o tipo de chamado a arquivar
+        schema:
+          type: string
+          example: carteira
+      responses:
+        '200':
+          description: Sucesso
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: tipo de chamado não encontrado
+          
+  
+  /login:
+    post:
+      tags:
+        - Autenticação
+      summary: Inicia uma sessão
+      description: Inicia uma sessão com as credenciais providas. Retorna a chave da sessão como uma string.
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/login'
+      responses:
+        '200':
+          description: sucesso
+          content:
+            application/json:
+              schema:
+                type: string
+                example: sessionkey
+        '401':
+          description: Credenciais incorretas
+  
+  /logout/{sessionKey}:
+    delete:
+      tags:
+        - Autenticação
+      summary: Encerra uma sessão
+      description: Encerra a sessão identificada pela chave fornecida.
+      operationId: logout
+      parameters:
+        - name: sessionKey
+          in: path
+          required: true
+          description: a chave da sessão fornecida pelo login
+          schema:
+            type: string
+            example: kf03wkf0
+      responses:
+        '200':
+          description: sucesso
+        '404':
+          description: sessão não existente
+components:
+  responses:
+    UnauthorizedError:
+      description: Token de acesso/sessão não presente ou inválido
+  schemas:
+    
+    UsuarioFulanoGet:
+      type: object
+      properties:
+        matricula: 
+          type: string
+          example: abcde
+        nome: 
+          type: string
+          example: fulano
+        usuarioAdm:
+          type: boolean
+          example: false
+    
+    SetorGet:
+      type: object
+      properties:
+        setor:
+          type: string
+          example: nome_do_setor
+        email:
+          type: string
+          example: fulano@gmail.com
+    
+    HistoricoGet:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 1
+        parecer:
+          type: string
+          example: um parecer qualquer
+        dataMod:
+          type: string
+          example: "03-01-1969"
+        setor:
+          type: string
+          example: nome do setor
+    
+    ChamadoPost:
+      type: object
+      properties:
+        idTipoChamado:
+          type: string
+          example: cartão
+        idMotivo:
+          type: string
+          example: 2a via
+        justificativa:
+          type: string
+          example: uma justificativa
+        dataAbertura:
+          type: string
+          example: 24-12-2012
+        idDiscente:
+          type: string
+          example: matricula
+  
+    ChamadoPut:
+      type: object
+      properties:
+        idUsuario:
+          type: string
+          example: matricula
+        protocolo:
+          type: string
+          example: protocolo do chamado
+        status:
+          type: integer
+          example: 2
+        parecer:
+          type: string
+          example: novo parecer
+        idSetor:
+          type: string
+          example: novo setor
+    
+    ChamadoGet:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 1
+        parecer:
+          type: string
+          example: o parecer atual
+        setor:
+          type: string
+          example: o nome do setor
+        tipoChamado:
+          type: string
+          example: o tipo do chamado
+        motivo:
+          type: string
+          example: um dos motivos
+        justificativa:
+          type: string
+          example: blablabla
+        dataAbertura:
+          type: string
+          example: 2024-03-23
+        matriculaAluno:
+          type: string
+          example: k0e230e3
+        nomeAluno:
+          type: string
+          example: fulano
+    
+    ChamadoGetAdmin:
+      type: object
+      properties:
+        protocolo: 
+          type: string
+          example: 4W3JD2
+        dataAbertura:
+          type: string
+          example: 2008-08-08
+        status:
+          type: integer
+          example: 1
+        prioridade: 
+          type: integer
+          example: 2
+    
+    ChamadoGetDiscente:
+      type: object
+      properties:
+        inicial:
+          type: object
+          properties:
+            tipoChamado:
+              type: string
+              example: um tipo qualquer
+            motivo:
+              type: string
+              example: o motivo
+            justificativa:
+              type: string
+              example: blabla
+            dataAbertura:
+              type: string
+              example: 2022-03-23
+        final:
+          type: object
+          properties:
+            parecer:
+              type: string
+              example: um parecer final
+            dataFechamento:
+              type: string
+              example: 2033-03-23
+            
+    
+    TipoChamadoPost:
+      type: object
+      properties:
+        tipo:
+          type: string
+          example: nome do tipo
+        motivos:
+          type: array
+          items:
+            type: string
+          example: [motivo1, m2, m3]
+        prioridade:
+          type: integer
+          example: 0
+    
+    TipoChamadoGet:
+      type: object
+      properties:
+        tipo:
+          type: string
+          example: nome do tipo
+        prioridade:
+          type: integer
+          example: 2
+        motivos:
+          type: array
+          items:
+            type: string
+          example: [m1,m2,m3]
+        arquivado:
+          type: boolean
+          example: false
+          
+    login:
+      type: object
+      properties:
+        matricula:
+          type: string
+          example: OIREMFWO
+        senha:
+          type: string
+          example: pass123
+    
+  
+    
+  securitySchemes:
+    sacAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    
