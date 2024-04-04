@@ -1,16 +1,19 @@
 package rj.cefet.sacapi.modelo;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.Objects;
 import java.util.UUID;
 
 @Entity(name = "usuario")
 @Table(name = "usuario")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Usuario {
+public class Usuario implements UserDetails {
     @Id
-    private UUID matricula;
+    private String matricula;
     @Column
     private String nome;
     @Column
@@ -27,14 +30,14 @@ public class Usuario {
     private String telefone;
 
     public Usuario() {
-        this.matricula = UUID.randomUUID();
+        this.matricula = UUID.randomUUID().toString();
     }
 
-    public UUID getMatricula() {
+    public String getMatricula() {
         return matricula;
     }
 
-    public void setMatricula(UUID matricula) {
+    public void setMatricula(String matricula) {
         this.matricula = matricula;
     }
 
@@ -105,5 +108,40 @@ public class Usuario {
     @Override
     public int hashCode() {
         return Objects.hash(getMatricula(), getNome(), getEmail(), getSenha(), getCep(), getEndereco(), getUsuarioAdm(), getTelefone());
+    }
+    
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getPassword() {
+        return getSenha();
+    }
+
+    @Override
+    public String getUsername() {
+        return getMatricula().toString();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
