@@ -37,9 +37,11 @@ public class ServicoDeTipoChamado {
     public Optional<TipoChamado> arquivarChamadoById(String id){
         Optional<TipoChamado> tipoChamadoOptional = repoTipoChamado.findById(id);//acha o tipo
         if (tipoChamadoOptional.isEmpty()){return tipoChamadoOptional;}//retorna optional vazio caso não exista
-        TipoChamado tipoChamado = tipoChamadoOptional.get();
+
+        var tipoChamado = tipoChamadoOptional.get();
         tipoChamado.setArquivado(true);
-        TipoChamado tipoChamadoArquivado = repoTipoChamado.save(tipoChamado);//arquiva o tipo
+        var tipoChamadoArquivado = repoTipoChamado.save(tipoChamado);//arquiva o tipo
+
         return Optional.of(tipoChamadoArquivado);
     }
 
