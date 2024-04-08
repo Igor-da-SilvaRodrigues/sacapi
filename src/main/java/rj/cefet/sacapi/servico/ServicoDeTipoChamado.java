@@ -6,7 +6,6 @@ import rj.cefet.sacapi.modelo.TipoChamado;
 import rj.cefet.sacapi.repositorio.RepositorioDeMotivo;
 import rj.cefet.sacapi.repositorio.RepositorioDeTipoChamado;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,20 +19,13 @@ public class ServicoDeTipoChamado {
         this.repositorioDeMotivo = repositorioDeMotivo;
     }
 
-    public TipoChamado salvar(TipoChamado tipoChamado, List<String> motivos){
-        //primeiro salvamos o tipo de chamado sem relacionamentos
-        TipoChamado salvo = repoTipoChamado.save(tipoChamado);
-        //criamos os motivos, já relacionados ao novo tipo de chamado
-        List<Motivo> motivosSalvos = repositorioDeMotivo.saveAll(
-                motivos.stream().map(s -> new Motivo(s, salvo)).toList()
-        );
-
-        //agora nosso objeto salvo está desatualizado, inserimos a lista de motivos criada, no nosso objeto de tipo
-        salvo.setMotivoList(motivosSalvos);
-        //Poderíamos salvar o tipo de chamado para atualizar a tabela caso necessário,
-        //ou resgatar a entidade diretamente do banco de dados, mas neste caso não será necessário.
-        //Apenas retornamos o objeto atualizado.
-        return salvo;
+    /**
+     * Salva um TipoChamado juntamente com seus Motivos.
+     * @param tipoChamado
+     * @return O tipo persistido.
+     */
+    public TipoChamado salvar(TipoChamado tipoChamado){
+        return repoTipoChamado.save(tipoChamado);
     }
 
 
