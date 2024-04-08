@@ -20,13 +20,10 @@ public class ControladorDeTipoChamado {
 
     @PostMapping
     ResponseEntity<TipoChamadoGetDto> criarTipoChamado(@RequestBody TipoChamadoPostDto tipoChamadoPostDto){
-        //converter o dto em entidade e lista de motivos
-        var saved = servicoDeTipoChamado.salvar(
-                tipoChamadoPostDto.toTipoChamado(),
-                tipoChamadoPostDto.motivos()
-            );
-        var tipoChamadoGetDto = TipoChamadoGetDto.fromTipoChamado(saved);
-        return ResponseEntity.ok().body(tipoChamadoGetDto);
+        var tipoChamado = tipoChamadoPostDto.toTipoChamado();
+        return ResponseEntity.ok().body(
+                TipoChamadoGetDto.fromTipoChamado(servicoDeTipoChamado.salvar(tipoChamado))
+        );
     }
 
     @GetMapping
