@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: SAC - OpenAPI 3.0
-  description: Documentação da API do Sistema Acadêmico de Chamados
+  description: Documentação da API do Sistema Acadêmico de Chamados 
   termsOfService: http://swagger.io/terms/
   contact:
     email: rodriguessigor2@gmail.com
@@ -99,7 +99,32 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
       security:
         - sacAuth: []
-        
+    
+    post:
+      tags:
+        - Setor
+      summary: Cria um setor
+      description: Cria um setor. Criado para facilitar o debug, provavelmente não será utilizado no app
+      operationId: createSetor
+      requestBody:
+        description: o setor a ser criado
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetorPost'
+      responses:
+        '200':
+          description: sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetorPost'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - sacAuth: []
+    
   /historico/{protocolo}:
     get:
       tags:
@@ -178,6 +203,9 @@ paths:
           description: Usuario, chamado ou setor não encontrados
         '401':
           description: Tokende acesso/sessão não presente ou inválido ou o usuário não é um administrador
+      security:
+        - sacAuth: []
+        
     get:
       tags:
         - Chamado
@@ -195,8 +223,10 @@ paths:
                   $ref: '#/components/schemas/ChamadoGetAdmin'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
-          
-  
+      security:
+        - sacAuth: []
+        
+        
   /chamado/{idChamado}:
     get:
       tags:
@@ -223,6 +253,8 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '404':
           description: Chamado não encontrado
+      security:
+        - sacAuth: []
     
   /chamado/usuario/{idUsuario}:
     get:
@@ -325,7 +357,29 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '404':
           description: tipo de chamado não encontrado
-          
+      security:
+        - sacAuth: []
+  
+  /tipochamado/ativo:
+    get:
+      tags:
+        - TipoChamado
+      summary: Retorna todos os chamados ativos
+      description: Retorna todos os chamados ativos, isto é, não arquivados.
+      operationId: findAllTiposAtivos
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TipoChamadoGet'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - sacAuth: []
   
   /login:
     post:
@@ -350,6 +404,58 @@ paths:
                 example: sessionkey
         '401':
           description: Credenciais incorretas
+  
+  /register/discente:
+    post:
+      tags:
+        - Autenticação
+      summary: Adiciona um discente
+      description: não-previsto, facilita adição de usuários, sem precisar mecher no BD
+      operationId: createDiscente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DiscentePost'
+      responses:
+        '200':
+          description: sucesso
+          content:
+            application/json:
+              schema:
+                type: string
+                example: matricula-do-discente
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - sacAuth: []
+  
+  /register/administrador:
+    post:
+      tags:
+        - Autenticação
+      summary: Adiciona um administrador
+      description: não-previsto, facilita adição de usuários, sem precisar mecher no BD
+      operationId: createAdministrador
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdministradorPost'
+      responses:
+        '200':
+          description: sucesso
+          content:
+            application/json:
+              schema:
+                type: string
+                example: matricula-do-administrador
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - sacAuth: []
   
   /logout/{sessionKey}:
     delete:
@@ -391,6 +497,16 @@ components:
           example: false
     
     SetorGet:
+      type: object
+      properties:
+        setor:
+          type: string
+          example: nome_do_setor
+        email:
+          type: string
+          example: fulano@gmail.com
+    
+    SetorPost:
       type: object
       properties:
         setor:
@@ -573,7 +689,52 @@ components:
           type: string
           example: pass123
     
-  
+    DiscentePost:
+      type: object
+      properties:
+        cep:
+          type: string
+          example: 23123
+        email:
+          type: string
+          example: example@email.com
+        endereco:
+          type: string
+          example: rua-tal
+        nome:
+          type: string
+          example: fulano
+        senha:
+          type: string
+          example: senhadofulano
+        telefone:
+          type: string
+          example: 190
+    
+    AdministradorPost:
+      type: object
+      properties:
+        cep:
+          type: string
+          example: 23123
+        email:
+          type: string
+          example: example@email.com
+        endereco:
+          type: string
+          example: rua-tal
+        nome:
+          type: string
+          example: cicrano
+        senha:
+          type: string
+          example: senhadocicrano
+        telefone:
+          type: string
+          example: 171
+        setor:
+          type: string
+          example: administração
     
   securitySchemes:
     sacAuth:
