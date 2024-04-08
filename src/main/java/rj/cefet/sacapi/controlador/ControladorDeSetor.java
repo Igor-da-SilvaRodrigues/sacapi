@@ -4,7 +4,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rj.cefet.sacapi.dto.SetorGetDto;
 import rj.cefet.sacapi.dto.SetorPostDto;
-import rj.cefet.sacapi.modelo.Setor;
 import rj.cefet.sacapi.servico.ServicoDeSetor;
 
 import java.util.List;
@@ -12,10 +11,10 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = "", maxAge = 3600)
 @RequestMapping("/setor")
-public class ControladorDeServico {
+public class ControladorDeSetor {
     private ServicoDeSetor servicoDeSetor;
 
-    public ControladorDeServico(ServicoDeSetor servicoDeSetor) {
+    public ControladorDeSetor(ServicoDeSetor servicoDeSetor) {
         this.servicoDeSetor = servicoDeSetor;
     }
 
