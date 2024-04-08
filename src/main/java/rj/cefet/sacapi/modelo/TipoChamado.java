@@ -2,20 +2,21 @@ package rj.cefet.sacapi.modelo;
 
 import jakarta.persistence.*;
 
-import java.util.List;
+import java.io.Serializable;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity(name = "tipo_chamado")
 @Table(name = "tipo_chamado")
-public class TipoChamado {
+public class TipoChamado implements Serializable {
     @Id
     private String tipo;
     private int prioridade;
 
     private boolean arquivado;
 
-    @OneToMany(mappedBy = "tipoChamado")
-    private List<Motivo> motivoList;
+    @OneToMany(mappedBy = "tipoChamado", cascade = CascadeType.ALL)//cascade pois "motivo" não tem significado ou uso fora de um tipo.
+    private Set<Motivo> motivoSet;
     public TipoChamado() {
     }
 
@@ -43,16 +44,12 @@ public class TipoChamado {
         this.prioridade = prioridade;
     }
 
-    public List<Motivo> getMotivoList() {
-        return motivoList;
+    public Set<Motivo> getMotivoSet() {
+        return motivoSet;
     }
 
-    public void setMotivoList(List<Motivo> motivoList) {
-        this.motivoList = motivoList;
-    }
-
-    public void addMotivo(Motivo motivo){
-        this.motivoList.add(motivo);
+    public void setMotivoSet(Set<Motivo> motivoSet) {
+        this.motivoSet = motivoSet;
     }
 
     @Override
