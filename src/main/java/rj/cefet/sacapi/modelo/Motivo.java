@@ -16,6 +16,11 @@ public class Motivo {
     public Motivo() {
     }
 
+    public Motivo(String motivo, TipoChamado tipoChamado){
+        this.motivo = motivo;
+        this.tipoChamado = tipoChamado;
+    }
+
     public String getMotivo() {
         return motivo;
     }
@@ -43,5 +48,15 @@ public class Motivo {
     @Override
     public int hashCode() {
         return Objects.hash(getMotivo());
+    }
+
+    public static Motivo fromString(String motivo) {
+        Motivo motivo1 = new Motivo();
+        motivo1.setMotivo(motivo);
+        return motivo1;
+    }
+
+    public String asString() {
+        return this.motivo;
     }
 }
