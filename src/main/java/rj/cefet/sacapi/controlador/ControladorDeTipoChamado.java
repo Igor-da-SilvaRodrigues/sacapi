@@ -38,4 +38,9 @@ public class ControladorDeTipoChamado {
         var tipoChamadoOptional = servicoDeTipoChamado.arquivarChamadoById(idTipoChamado);
         return tipoChamadoOptional.isPresent() ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
+
+    @GetMapping("/ativo")
+    ResponseEntity<List<TipoChamadoGetDto>> getTiposAtivos(){
+        return ResponseEntity.ok().body(servicoDeTipoChamado.findTipoChamadoByArquivado(false).stream().map(TipoChamadoGetDto::fromTipoChamado).toList());
+    }
 }
