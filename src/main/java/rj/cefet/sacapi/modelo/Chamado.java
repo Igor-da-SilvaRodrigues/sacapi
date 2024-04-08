@@ -62,7 +62,7 @@ public class Chamado {
         if(this.tipoChamado == null){
             throw new IllegalStateException("O chamado não possui tipo");
         }
-        if (!this.tipoChamado.getMotivoList().contains(motivo)){
+        if (!this.tipoChamado.getMotivoSet().contains(motivo)){
             throw new IllegalArgumentException("O tipo deste chamado não admite o motivo {%s}".formatted(motivo.toString()));
         }
         this.motivo = motivo;
