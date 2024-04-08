@@ -2,14 +2,13 @@ package rj.cefet.sacapi.controlador;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import rj.cefet.sacapi.dto.UsuarioGetDto;
+import rj.cefet.sacapi.modelo.Usuario;
 import rj.cefet.sacapi.servico.ServicoDeUsuario;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "", maxAge = 3600)
@@ -27,5 +26,11 @@ public class ControladorDeUsuario {
         return ResponseEntity.status(HttpStatus.OK).body(
                 servicoDeUsuario.findAllUsuario().stream().map(UsuarioGetDto::fromUsuario).toList()
         );
+    }
+
+    @GetMapping("/{idUsuario}")
+    public ResponseEntity<UsuarioGetDto> getById(@PathVariable String idUsuario){
+        Optional<Usuario> usuarioOptional = servicoDeUsuario.findById(idUsuario);
+        return usuarioOptional.map(usuario -> ResponseEntity.ok().body(UsuarioGetDto.fromUsuario(usuario))).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
