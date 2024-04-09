@@ -10,8 +10,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import rj.cefet.sacapi.dto.LoginDto;
+import rj.cefet.sacapi.dto.RegisterAdministradorDto;
 import rj.cefet.sacapi.dto.RegisterDiscenteDto;
+import rj.cefet.sacapi.modelo.Administrador;
 import rj.cefet.sacapi.modelo.Discente;
+import rj.cefet.sacapi.modelo.Setor;
 import rj.cefet.sacapi.modelo.Usuario;
 import rj.cefet.sacapi.seguranca.servico.ServicoDeTokens;
 import rj.cefet.sacapi.servico.ServicoDeUsuario;
@@ -55,5 +58,20 @@ public class ControladorDeAutenticacao {
         this.servicoDeUsuario.salvar(discente);
 
         return ResponseEntity.ok().body(discente.getMatricula());
+    }
+
+    @PostMapping("/register/administrador")
+    public ResponseEntity<String> registerAdmin(@RequestBody @Valid RegisterAdministradorDto dto){
+        Administrador administrador = new Administrador();
+        administrador.setCep(dto.cep());
+        administrador.setEmail(dto.email());
+        administrador.setEndereco(dto.endereco());
+        administrador.setNome(dto.nome());
+        administrador.setSenha(new BCryptPasswordEncoder().encode(dto.senha()));
+        administrador.setTelefone(dto.telefone());
+        administrador.setUsuarioAdm(true);
+        administrador.setSetor(new Setor(dto.setor()));
+
+        return ResponseEntity.ok().body(servicoDeUsuario.salvarAdmin(administrador).getMatricula());
     }
 }
