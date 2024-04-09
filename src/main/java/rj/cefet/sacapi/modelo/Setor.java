@@ -18,6 +18,10 @@ public class Setor {
     public Setor() {
     }
 
+    public Setor(String setor) {
+        this.setor = setor;
+    }
+
     public Administrador getAdministrador() {
         return administrador;
     }
@@ -57,11 +61,11 @@ public class Setor {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Setor setor1 = (Setor) o;
-        return Objects.equals(getSetor(), setor1.getSetor()) && Objects.equals(getEmail(), setor1.getEmail());
+        return Objects.equals(getSetor(), setor1.getSetor());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getSetor(), getEmail());
+        return Objects.hash(getSetor());
     }
 }
