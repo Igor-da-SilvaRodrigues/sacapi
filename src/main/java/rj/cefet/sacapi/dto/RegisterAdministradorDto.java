@@ -1,4 +1,20 @@
 package rj.cefet.sacapi.dto;
 
-public record RegisterAdministradorDto(String cep, String email, String endereco, String nome,  String senha,  String telefone, String setor) {
+import jakarta.validation.constraints.NotBlank;
+
+public record RegisterAdministradorDto(
+        @NotBlank
+        String cep,
+        @NotBlank
+        String email,
+        @NotBlank
+        String endereco,
+        @NotBlank
+        String nome,
+        @NotBlank
+        String senha,
+        @NotBlank
+        String telefone,
+        @NotBlank
+        String setor) {
 }

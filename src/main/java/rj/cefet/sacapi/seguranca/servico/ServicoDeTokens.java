@@ -49,9 +49,9 @@ public class ServicoDeTokens {
                     .verify(token)
                     .getSubject();
         } catch (IllegalArgumentException e) {
-            throw new RuntimeException("Erro ao validar token de sessão", e);
+            throw new IllegalArgumentException("Erro ao validar token de sessao", e);
         } catch (JWTVerificationException e) {
-            return "";
+            throw new JWTVerificationException("Erro ao validar o token de sessao, possível malformação do token.", e);
         }
     }
 

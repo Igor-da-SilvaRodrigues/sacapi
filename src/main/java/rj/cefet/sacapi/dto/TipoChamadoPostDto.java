@@ -1,12 +1,21 @@
 package rj.cefet.sacapi.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import rj.cefet.sacapi.modelo.Motivo;
 import rj.cefet.sacapi.modelo.TipoChamado;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public record TipoChamadoPostDto(String tipo, Set<String> motivos, Integer prioridade) {
+public record TipoChamadoPostDto(
+        @NotBlank
+        String tipo,
+        @NotEmpty
+        Set<String> motivos,
+        @NotNull
+        Integer prioridade) {
     /**
      * Converte este dto em um TipoChamado
      * @return

@@ -1,5 +1,6 @@
 package rj.cefet.sacapi.controlador;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rj.cefet.sacapi.dto.SetorGetDto;
@@ -9,7 +10,7 @@ import rj.cefet.sacapi.servico.ServicoDeSetor;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/setor")
 public class ControladorDeSetor {
     private ServicoDeSetor servicoDeSetor;
@@ -26,7 +27,7 @@ public class ControladorDeSetor {
     }
 
     @PostMapping
-    public ResponseEntity<SetorGetDto> criarSetor(@RequestBody SetorPostDto setorPostDto){
+    public ResponseEntity<SetorGetDto> criarSetor(@RequestBody @Valid SetorPostDto setorPostDto){
         SetorGetDto response = SetorGetDto.fromSetor(servicoDeSetor.salvar(setorPostDto.toSetor()));
         return ResponseEntity.ok().body(response);
     }

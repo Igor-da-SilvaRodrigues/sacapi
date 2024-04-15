@@ -1,5 +1,8 @@
 package rj.cefet.sacapi.controlador;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rj.cefet.sacapi.dto.TipoChamadoGetDto;
@@ -11,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/tipochamado")
 public class ControladorDeTipoChamado {
     private ServicoDeTipoChamado servicoDeTipoChamado;
@@ -21,7 +24,7 @@ public class ControladorDeTipoChamado {
     }
 
     @PostMapping
-    ResponseEntity<TipoChamadoGetDto> criarTipoChamado(@RequestBody TipoChamadoPostDto tipoChamadoPostDto){
+    ResponseEntity<TipoChamadoGetDto> criarTipoChamado(@RequestBody @Valid TipoChamadoPostDto tipoChamadoPostDto){
         var tipoChamado = tipoChamadoPostDto.toTipoChamado();
         return ResponseEntity.ok().body(
                 TipoChamadoGetDto.fromTipoChamado(servicoDeTipoChamado.salvar(tipoChamado))
@@ -34,7 +37,7 @@ public class ControladorDeTipoChamado {
     }
 
     @DeleteMapping("/{idTipoChamado}")
-    ResponseEntity<String> arquivarTipoChamado(@PathVariable String idTipoChamado){
+    ResponseEntity<String> arquivarTipoChamado(@PathVariable @NotBlank String idTipoChamado){
         var tipoChamadoOptional = servicoDeTipoChamado.arquivarChamadoById(idTipoChamado);
         return tipoChamadoOptional.isPresent() ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
