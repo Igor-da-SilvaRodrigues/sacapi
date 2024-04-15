@@ -37,6 +37,7 @@ public class ConfiguracaoDeSeguranca {
                         .anyRequest().authenticated())
                 .addFilterBefore(filtro, UsernamePasswordAuthenticationFilter.class)
                 .build();
+                // CRIAR UM GUARD PARA SEGURANÇA
     }
 
     @Bean
