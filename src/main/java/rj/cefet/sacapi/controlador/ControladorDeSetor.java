@@ -9,7 +9,7 @@ import rj.cefet.sacapi.servico.ServicoDeSetor;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/setor")
 public class ControladorDeSetor {
     private ServicoDeSetor servicoDeSetor;

@@ -20,7 +20,7 @@ import rj.cefet.sacapi.seguranca.servico.ServicoDeTokens;
 import rj.cefet.sacapi.servico.ServicoDeUsuario;
 
 @RestController
-@CrossOrigin(origins = "", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class ControladorDeAutenticacao {
 
     private AuthenticationManager authenticationManager;
