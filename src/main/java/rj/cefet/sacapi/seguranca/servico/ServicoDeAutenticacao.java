@@ -16,6 +16,10 @@ public class ServicoDeAutenticacao implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return repoUsuario.findByMatricula(username);
+        UserDetails retorno = repoUsuario.findByMatricula(username);
+        if (retorno == null){
+            throw new UsernameNotFoundException("Username not found");
+        }
+        return retorno;
     }
 }
