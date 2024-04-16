@@ -34,7 +34,7 @@ public class ConfiguracaoDeSeguranca {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, "/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/sac/api/login").permitAll()
                         .anyRequest().authenticated()
                 ).addFilterBefore(filtro, UsernamePasswordAuthenticationFilter.class)
                 .build();

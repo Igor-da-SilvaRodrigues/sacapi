@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
-@RequestMapping("/tipochamado")
+@RequestMapping("/sac/api/tipochamado")
 public class ControladorDeTipoChamado {
     private ServicoDeTipoChamado servicoDeTipoChamado;
 

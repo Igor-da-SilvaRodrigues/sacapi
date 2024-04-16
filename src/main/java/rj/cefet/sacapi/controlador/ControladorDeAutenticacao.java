@@ -22,6 +22,7 @@ import rj.cefet.sacapi.servico.ServicoDeUsuario;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
+@RequestMapping("/sac/api")
 public class ControladorDeAutenticacao {
 
     private AuthenticationManager authenticationManager;
