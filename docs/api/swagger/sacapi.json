@@ -68,7 +68,7 @@
               }
             }
           },
-          "401": {
+          "403": {
             "$ref": "#/components/responses/UnauthorizedError"
           }
         }
@@ -110,7 +110,7 @@
               }
             }
           },
-          "401": {
+          "403": {
             "$ref": "#/components/responses/UnauthorizedError"
           },
           "404": {
@@ -141,7 +141,7 @@
               }
             }
           },
-          "401": {
+          "403": {
             "$ref": "#/components/responses/UnauthorizedError"
           }
         },
@@ -180,7 +180,7 @@
               }
             }
           },
-          "401": {
+          "403": {
             "$ref": "#/components/responses/UnauthorizedError"
           }
         },
@@ -225,7 +225,7 @@
               }
             }
           },
-          "401": {
+          "403": {
             "$ref": "#/components/responses/UnauthorizedError"
           },
           "404": {
@@ -297,7 +297,7 @@
           "400": {
             "description": "Entrada incorreta"
           },
-          "401": {
+          "403": {
             "description": "Tokende acesso/sessão não presente ou inválido ou o usuário não é um administrador"
           },
           "404": {
@@ -331,7 +331,7 @@
               }
             }
           },
-          "401": {
+          "403": {
             "$ref": "#/components/responses/UnauthorizedError"
           }
         },
@@ -373,7 +373,7 @@
               }
             }
           },
-          "401": {
+          "403": {
             "$ref": "#/components/responses/UnauthorizedError"
           },
           "404": {
@@ -421,7 +421,7 @@
               }
             }
           },
-          "401": {
+          "403": {
             "$ref": "#/components/responses/UnauthorizedError"
           },
           "404": {
@@ -461,7 +461,7 @@
           "400": {
             "description": "Entrada incorreta"
           },
-          "401": {
+          "403": {
             "$ref": "#/components/responses/UnauthorizedError"
           }
         },
@@ -492,7 +492,7 @@
               }
             }
           },
-          "401": {
+          "403": {
             "$ref": "#/components/responses/UnauthorizedError"
           }
         },
@@ -527,7 +527,7 @@
           "200": {
             "description": "Sucesso"
           },
-          "401": {
+          "403": {
             "$ref": "#/components/responses/UnauthorizedError"
           },
           "404": {
@@ -563,7 +563,7 @@
               }
             }
           },
-          "401": {
+          "403": {
             "$ref": "#/components/responses/UnauthorizedError"
           }
         },
@@ -641,6 +641,9 @@
             }
           },
           "401": {
+            "$ref": "#/components/responses/PermissionDenied"
+          },
+          "403": {
             "$ref": "#/components/responses/UnauthorizedError"
           }
         },
@@ -682,7 +685,13 @@
             }
           },
           "401": {
+            "$ref": "#/components/responses/PermissionDenied"
+          },
+          "403": {
             "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "description": "o setor não existe"
           }
         },
         "security": [
@@ -691,42 +700,15 @@
           }
         ]
       }
-    },
-    "/logout/{sessionKey}": {
-      "delete": {
-        "tags": [
-          "Autenticação"
-        ],
-        "summary": "Encerra uma sessão",
-        "description": "Encerra a sessão identificada pela chave fornecida.",
-        "operationId": "logout",
-        "parameters": [
-          {
-            "name": "sessionKey",
-            "in": "path",
-            "required": true,
-            "description": "a chave da sessão fornecida pelo login",
-            "schema": {
-              "type": "string",
-              "example": "kf03wkf0"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "sucesso"
-          },
-          "404": {
-            "description": "sessão não existente"
-          }
-        }
-      }
     }
   },
   "components": {
     "responses": {
       "UnauthorizedError": {
-        "description": "Token de acesso/sessão não presente ou inválido"
+        "description": "Token de acesso/sessão não presente ou inválido, ou tempo limite de seção atingido."
+      },
+      "PermissionDenied": {
+        "description": "Token não descreve usuário com permissões de acesso"
       }
     },
     "schemas": {
