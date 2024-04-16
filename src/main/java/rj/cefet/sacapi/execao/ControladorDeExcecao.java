@@ -2,6 +2,7 @@ package rj.cefet.sacapi.execao;
 
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.SignatureVerificationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
-
+import org.springframework.security.access.AccessDeniedException;
 import javax.naming.AuthenticationException;
 
 @ControllerAdvice
@@ -44,5 +45,10 @@ public class ControladorDeExcecao {
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<String> handleNoResourceFoundException(NoResourceFoundException ex){
         return ResponseEntity.notFound().build();
+    }
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<String> handleAccessDeniedException(AccessDeniedException ex){
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Acesso não autorizado");
     }
 }

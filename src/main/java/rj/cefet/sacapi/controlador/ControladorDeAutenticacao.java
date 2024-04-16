@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -45,6 +46,7 @@ public class ControladorDeAutenticacao {
     }
 
     @PostMapping("/register/discente")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<String> register(@RequestBody @Valid RegisterDiscenteDto dto){
         Discente discente = new Discente();
         discente.setCep(dto.cep());
@@ -61,6 +63,7 @@ public class ControladorDeAutenticacao {
     }
 
     @PostMapping("/register/administrador")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<String> registerAdmin(@RequestBody @Valid RegisterAdministradorDto dto){
         Administrador administrador = new Administrador();
         administrador.setCep(dto.cep());
