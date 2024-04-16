@@ -3,6 +3,7 @@ package rj.cefet.sacapi.execao;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -50,5 +51,10 @@ public class ControladorDeExcecao {
     public ResponseEntity<String> handleAccessDeniedException(AccessDeniedException ex){
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Acesso não autorizado");
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<String> handleEntityNotFoundException(EntityNotFoundException ex){
+        return ResponseEntity.notFound().build();
     }
 }

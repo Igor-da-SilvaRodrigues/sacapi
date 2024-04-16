@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
-@RequestMapping("/setor")
+@RequestMapping("/sac/api/setor")
 public class ControladorDeSetor {
     private ServicoDeSetor servicoDeSetor;
 

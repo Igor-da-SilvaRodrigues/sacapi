@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
-@RequestMapping("/usuario")
+@RequestMapping("/sac/api/usuario")
 public class ControladorDeUsuario {
 
     private ServicoDeUsuario servicoDeUsuario;
