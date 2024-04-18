@@ -22,39 +22,63 @@ public class ControladorDeExcecao {
     //erro de autenticação
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<String> handleBadCredentialsException(BadCredentialsException ex){
+        ex.printStackTrace();
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Matrícula ou senha incorretas!");
     }
 
     //mensagem http mal formada
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<String> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex){
+        ex.printStackTrace();
         return ResponseEntity.badRequest().build();
     }
 
     //erro de validação
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex){
+        ex.printStackTrace();
         return ResponseEntity.badRequest().build();
     }
 
     //erro de validação
     @ExceptionHandler(HandlerMethodValidationException.class)
     public ResponseEntity<String> handleHandlerMethodValidationException(HandlerMethodValidationException ex){
+        ex.printStackTrace();
         return ResponseEntity.badRequest().build();
     }
     //endpoint inexistente
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<String> handleNoResourceFoundException(NoResourceFoundException ex){
+        ex.printStackTrace();
         return ResponseEntity.notFound().build();
     }
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<String> handleAccessDeniedException(AccessDeniedException ex){
-
+        ex.printStackTrace();
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Acesso não autorizado");
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<String> handleEntityNotFoundException(EntityNotFoundException ex){
+        ex.printStackTrace();
         return ResponseEntity.notFound().build();
+    }
+
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<String> handleNullPointerException(NullPointerException ex){
+        ex.printStackTrace();
+        return ResponseEntity.internalServerError().build();
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex){
+        ex.printStackTrace();
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<String> handleIllegalStateException(IllegalStateException ex){
+        ex.printStackTrace();
+        return ResponseEntity.internalServerError().body(ex.getMessage());
     }
 }
