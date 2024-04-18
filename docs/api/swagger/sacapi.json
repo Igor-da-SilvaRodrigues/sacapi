@@ -260,10 +260,23 @@
         },
         "responses": {
           "200": {
-            "description": "Sucesso"
+            "description": "Sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChamadoPostResponse"
+                }
+              }
+            }
           },
           "400": {
-            "description": "Entrada incorreta"
+            "description": "Entrada incorreta, como por exemplo, se o motivo fornecido não está relacionado ao tipo de chamado espeficicado"
+          },
+          "403": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "description": "Caso o tipo de chamado ou discente fornecidos não possam ser encontrados."
           }
         },
         "security": [
@@ -798,6 +811,51 @@
           "idDiscente": {
             "type": "string",
             "example": "matricula"
+          }
+        }
+      },
+      "ChamadoPostResponse": {
+        "type": "object",
+        "properties": {
+          "protocolo": {
+            "type": "string",
+            "example": "5a2d4392-710a-43d7-9f06-0a9505464d9a"
+          },
+          "status": {
+            "type": "integer",
+            "example": 1
+          },
+          "parecer": {
+            "type": "string",
+            "example": "o parecer atual"
+          },
+          "setor": {
+            "type": "string",
+            "example": "o nome do setor"
+          },
+          "tipoChamado": {
+            "type": "string",
+            "example": "o tipo do chamado"
+          },
+          "motivo": {
+            "type": "string",
+            "example": "um dos motivos"
+          },
+          "justificativa": {
+            "type": "string",
+            "example": "blablabla"
+          },
+          "dataAbertura": {
+            "type": "string",
+            "example": "2024-03-23T00:00:00.000Z"
+          },
+          "matriculaAluno": {
+            "type": "string",
+            "example": "k0e230e3"
+          },
+          "nomeAluno": {
+            "type": "string",
+            "example": "fulano"
           }
         }
       },
