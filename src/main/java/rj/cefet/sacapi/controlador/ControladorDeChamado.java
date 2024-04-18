@@ -3,6 +3,7 @@ package rj.cefet.sacapi.controlador;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import rj.cefet.sacapi.dto.ChamadoGetDto;
 import rj.cefet.sacapi.dto.ChamadoPostResposeDto;
 import rj.cefet.sacapi.dto.ChamadoPostDto;
 import rj.cefet.sacapi.modelo.Chamado;
@@ -14,6 +15,7 @@ import rj.cefet.sacapi.servico.ServicoDeDiscente;
 import rj.cefet.sacapi.servico.ServicoDeTipoChamado;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -49,6 +51,10 @@ public class ControladorDeChamado {
 
         var retorno = servicoDeChamado.salvar(chamado);
         return ResponseEntity.ok().body(ChamadoPostResposeDto.fromChamado(retorno));
+    }
+    @GetMapping
+    ResponseEntity<List<ChamadoGetDto>> getAllChamados(){
+        return ResponseEntity.ok().body(servicoDeChamado.findAllChamados().stream().map(ChamadoGetDto::fromChamado).toList());
     }
 
     @GetMapping("/{idChamado}")
