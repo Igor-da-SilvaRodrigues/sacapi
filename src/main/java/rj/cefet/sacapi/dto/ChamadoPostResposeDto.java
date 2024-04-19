@@ -19,11 +19,11 @@ public record ChamadoPostResposeDto(
                 chamado.getProtocolo(),
                 chamado.getStatus(),
                 chamado.getParecer(),
-                chamado.getSetor() != null ? chamado.getSetor().getSetor(): "", //setor pode ser nulo. Sempre é nulo quando o chamado é aberto
+                chamado.getSetor() != null ? chamado.getSetor().getSetor(): null, //setor pode ser nulo. Sempre é nulo quando o chamado é aberto
                 chamado.getTipoChamado().getTipo(),
                 chamado.getMotivo().getMotivo(),
                 chamado.getJustificativa(),
-                chamado.getDataAbertura().toString(),
+                chamado.getDataAbertura().toLocalDate().toString(),
                 chamado.getDiscente().getMatricula(),
                 chamado.getDiscente().getNome()
         );
