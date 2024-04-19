@@ -27,8 +27,10 @@ public class ServicoDeChamado {
     public List<Chamado> findAllChamados(){
         return repositorioDeChamado.findAll();
     }
-    public Optional<Chamado> findById(String protocolo){
-        return repositorioDeChamado.findById(protocolo);
+    public Chamado findById(String protocolo){
+        Optional<Chamado> chamadoOptional = repositorioDeChamado.findById(protocolo);
+        if (chamadoOptional.isEmpty()) throw new EntityNotFoundException("Chamado de protocolo '%s' não encontrado".formatted(protocolo));
+        return chamadoOptional.get();
     }
 
     /**

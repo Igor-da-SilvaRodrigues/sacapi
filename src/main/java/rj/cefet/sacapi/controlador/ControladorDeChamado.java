@@ -1,8 +1,10 @@
 package rj.cefet.sacapi.controlador;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import rj.cefet.sacapi.dto.ChamadoGetByIdDto;
 import rj.cefet.sacapi.dto.ChamadoGetDto;
 import rj.cefet.sacapi.dto.ChamadoPostResposeDto;
 import rj.cefet.sacapi.dto.ChamadoPostDto;
@@ -58,8 +60,8 @@ public class ControladorDeChamado {
     }
 
     @GetMapping("/{idChamado}")
-    ResponseEntity<String> getChamadoById(@PathVariable String idChamado){
-        return null;
+    ResponseEntity<ChamadoGetByIdDto> getChamadoById(@PathVariable @NotBlank String idChamado){
+        return ResponseEntity.ok().body(ChamadoGetByIdDto.fromChamado(servicoDeChamado.findById(idChamado)));
     }
 
     @GetMapping("/usuario/{idUsuario}")
