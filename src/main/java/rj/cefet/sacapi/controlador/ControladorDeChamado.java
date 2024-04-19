@@ -5,12 +5,11 @@ import jakarta.validation.constraints.NotBlank;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rj.cefet.sacapi.dto.*;
-import rj.cefet.sacapi.modelo.Chamado;
-import rj.cefet.sacapi.modelo.Discente;
-import rj.cefet.sacapi.modelo.Motivo;
-import rj.cefet.sacapi.modelo.TipoChamado;
+import rj.cefet.sacapi.enums.Status;
+import rj.cefet.sacapi.modelo.*;
 import rj.cefet.sacapi.servico.ServicoDeChamado;
 import rj.cefet.sacapi.servico.ServicoDeDiscente;
+import rj.cefet.sacapi.servico.ServicoDeSetor;
 import rj.cefet.sacapi.servico.ServicoDeTipoChamado;
 
 import java.time.LocalDateTime;
@@ -24,6 +23,7 @@ public class ControladorDeChamado {
     private ServicoDeChamado servicoDeChamado;
     private ServicoDeTipoChamado servicoDeTipoChamado;
     private ServicoDeDiscente servicoDeDiscente;
+    private ServicoDeSetor servicoDeSetor;
 
     public ControladorDeChamado(ServicoDeChamado servicoDeChamado, ServicoDeTipoChamado servicoDeTipoChamado, ServicoDeDiscente servicoDeDiscente) {
         this.servicoDeChamado = servicoDeChamado;
@@ -51,6 +51,33 @@ public class ControladorDeChamado {
         var retorno = servicoDeChamado.salvar(chamado);
         return ResponseEntity.ok().body(ChamadoPostResposeDto.fromChamado(retorno));
     }
+
+    @PutMapping
+    ResponseEntity<String> atualizarChamado(@RequestBody @Valid ChamadoPutDto dto){
+        Chamado chamado = servicoDeChamado.findById(dto.protocolo());
+        if (chamado.getStatus() == Status.FECHADO.value) return ResponseEntity.badRequest().body("Chamado fechado para alterações");
+        boolean changed = false;
+        //set setor
+        if (dto.idSetor() != null){
+            chamado.setSetor(servicoDeSetor.findById(dto.idSetor()));
+            changed = true;
+        }
+        //set parecer
+        if (dto.parecer() != null){
+            chamado.setParecer(dto.parecer());
+            changed = true;
+        }
+        //set status
+        if (dto.status() != null){
+            if(dto.status() == Status.FECHADO.value) chamado.setDataFechamento(LocalDateTime.now());
+            chamado.setStatus(dto.status());
+            changed = true;
+        }
+
+        if (changed) servicoDeChamado.salvar(chamado);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping
     ResponseEntity<List<ChamadoGetDto>> getAllChamados(){
         return ResponseEntity.ok().body(servicoDeChamado.findAllChamados().stream().map(ChamadoGetDto::fromChamado).toList());
