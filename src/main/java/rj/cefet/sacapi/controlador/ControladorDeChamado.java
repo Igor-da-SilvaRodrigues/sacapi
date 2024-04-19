@@ -4,10 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import rj.cefet.sacapi.dto.ChamadoGetByIdDto;
-import rj.cefet.sacapi.dto.ChamadoGetDto;
-import rj.cefet.sacapi.dto.ChamadoPostResposeDto;
-import rj.cefet.sacapi.dto.ChamadoPostDto;
+import rj.cefet.sacapi.dto.*;
 import rj.cefet.sacapi.modelo.Chamado;
 import rj.cefet.sacapi.modelo.Discente;
 import rj.cefet.sacapi.modelo.Motivo;
@@ -65,8 +62,7 @@ public class ControladorDeChamado {
     }
 
     @GetMapping("/usuario/{idUsuario}")
-    ResponseEntity<String> getAllChamadosByUsuario(@PathVariable String idUsuario){
-        servicoDeChamado.findByMatriculaDeDiscente(idUsuario);
-        return ResponseEntity.ok().body("Ler log");
+    ResponseEntity<List<ChamadoGetByUsuarioDto>> getAllChamadosByUsuario(@PathVariable String idUsuario){
+        return ResponseEntity.ok().body(servicoDeChamado.findByMatriculaDeDiscente(idUsuario).stream().map(ChamadoGetByUsuarioDto::fromChamado).toList());
     }
 }
