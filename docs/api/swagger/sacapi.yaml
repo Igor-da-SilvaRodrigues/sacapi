@@ -21,6 +21,9 @@ tags:
   - name: Chamado
     description: Operações com chamados
   
+  - name: Comentário
+    description: Operações com comentários
+  
   - name: TipoChamado
     description: Operações com tipos de chamadoss
   
@@ -176,8 +179,16 @@ paths:
       responses:
         '200':
           description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChamadoPostResponse'
         '400':
-          description: Entrada incorreta
+          description: Entrada incorreta, como por exemplo, se o motivo fornecido não está relacionado ao tipo de chamado espeficicado
+        '403':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Caso o tipo de chamado ou discente fornecidos não possam ser encontrados.
       security:
         - sacAuth: []
         
@@ -188,7 +199,7 @@ paths:
       description: Atualiza um chamado aberto por um usuario.
       operationId: updateChamado
       requestBody:
-        description: informação sobre o chamado a ser atualizado. 'idUsuario' é a matrícula do administrador que está fazendo a alteração, 'protocolo' identificam o chamado a ser atualizado. Os outros atributos são opcionais e indicam as atualizações requisitadas. Se eles não forem fornecidos, o atributo correspondente não será atualizado.
+        description: informação sobre o chamado a ser atualizado. 'idUsuario' é a matrícula do administrador que está fazendo a alteração, 'protocolo' identificam o chamado a ser atualizado. Os outros atributos são opcionais e indicam as atualizações requisitadas. Se eles não forem fornecidos, o atributo correspondente não será atualizado. Se o chamado já estiver com o status de fechado, a alteração será negada, ao mesmo tempo, definir o status do chamado como fechado irá automatiamente fechar o chamado para qualquer alteração futura. 
         required: true
         content:
           application/json:
@@ -198,9 +209,9 @@ paths:
         '200':
           description: Sucesso
         '400':
-          description: Entrada incorreta
+          description: Entrada incorreta, ou alteração negada
         '404':
-          description: Usuario, chamado ou setor não encontrados
+          description: Chamado ou setor não encontrados
         '403':
           description: Tokende acesso/sessão não presente ou inválido ou o usuário não é um administrador
       security:
@@ -289,6 +300,66 @@ paths:
         - sacAuth: []
         
   
+  /comentario:
+    post:
+      tags:
+        - Comentário
+      summary: Envia um comentário de um usuário para um chamado
+      description: ''
+      operationId: enviarComentario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ComentarioPost'
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComentarioPostResponse'
+        '403':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Usuario ou Chamado não encontrados
+        '400':
+          description: Chamado não admite comentários pois não está no estado 'retornado'
+      security:
+        - sacAuth: []
+  
+  /comentario/chamado/{idChamado}:
+    get:
+      tags:
+        - Comentário
+      summary: Retorna todos os comentários de um chamado
+      description: Retorna todos os comentários de um chamado em ordem decrescente (Novos primeiro)
+      operationId: getComentarioByChamado
+      parameters:
+        - name: idChamado
+          in: path
+          description: protocolo do chamado
+          required: true
+          schema:
+            type: string
+            example: 8999f69f-98ca-4ff9-9a93-1b7003199661
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ComentarioGetByChamado'
+        '403':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Chamado não encontrado
+      security:
+        - sacAuth: []
+        
   /tipochamado:
     post:
       tags:
@@ -538,7 +609,41 @@ components:
         idDiscente:
           type: string
           example: matricula
-  
+    
+    ChamadoPostResponse:
+      type: object
+      properties:
+        protocolo:
+          type: string
+          example: 5a2d4392-710a-43d7-9f06-0a9505464d9a
+        status:
+          type: integer
+          example: 1
+        parecer:
+          type: string
+          example: o parecer atual
+        setor:
+          type: string
+          example: o nome do setor
+        tipoChamado:
+          type: string
+          example: o tipo do chamado
+        motivo:
+          type: string
+          example: um dos motivos
+        justificativa:
+          type: string
+          example: blablabla
+        dataAbertura:
+          type: string
+          example: 2024-03-23
+        matriculaAluno:
+          type: string
+          example: k0e230e3
+        nomeAluno:
+          type: string
+          example: fulano
+      
     ChamadoPut:
       type: object
       properties:
@@ -561,6 +666,9 @@ components:
     ChamadoGet:
       type: object
       properties:
+        protocolo:
+          type: string
+          example: 5a2d4392-710a-43d7-9f06-0a9505464d9a
         status:
           type: integer
           example: 1
@@ -582,6 +690,9 @@ components:
         dataAbertura:
           type: string
           example: 2024-03-23
+        dataFechamento:
+          type: string
+          example: 2024-04-22
         matriculaAluno:
           type: string
           example: k0e230e3
@@ -611,6 +722,9 @@ components:
         inicial:
           type: object
           properties:
+            protocolo:
+              type: string
+              example: 5a2d4392-710a-43d7-9f06-0a9505464d9a
             tipoChamado:
               type: string
               example: um tipo qualquer
@@ -623,7 +737,7 @@ components:
             dataAbertura:
               type: string
               example: 2022-03-23
-        final:
+        terminal:
           type: object
           properties:
             parecer:
@@ -633,6 +747,63 @@ components:
               type: string
               example: 2033-03-23
             
+    
+    ComentarioPost:
+      type: object
+      properties:
+        mensagem:
+          type: string
+          example: este é um comentário
+        matriculaUsuario:
+          type: string
+          example: af7c1fe6-d669-414e-b066-e9733f0de7a8
+        protocoloChamado:
+          type: string
+          example: 08c71152-c552-42e7-b094-f510ff44e9cb
+    
+    ComentarioPostResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: o id do comentario
+        mensagem:
+          type: string
+          example: este é um comentário
+        dataEnvio:
+          type: string
+          example: 2024-04-20T16:06:26.430876539
+        usuarioNome:
+          type: string
+          example: O nome do usuário
+        usuarioMatricula:
+          type: string
+          example: O id do usuário
+        chamadoProtocolo:
+          type: string
+          example: O id do chamado
+    
+    ComentarioGetByChamado:
+      type: object
+      properties:
+        id:
+          type: string
+          example: o id do comentario
+        mensagem:
+          type: string
+          example: este é um comentário
+        dataEnvio:
+          type: string
+          example: 2024-04-20T16:06:26.430876539
+        usuarioNome:
+          type: string
+          example: O nome do usuário
+        usuarioMatricula:
+          type: string
+          example: O id do usuário
+        chamadoProtocolo:
+          type: string
+          example: O id do chamado
     
     TipoChamadoPost:
       type: object

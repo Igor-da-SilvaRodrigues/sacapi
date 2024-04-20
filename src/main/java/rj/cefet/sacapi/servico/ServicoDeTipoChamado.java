@@ -1,5 +1,6 @@
 package rj.cefet.sacapi.servico;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import rj.cefet.sacapi.modelo.Motivo;
 import rj.cefet.sacapi.modelo.TipoChamado;
@@ -12,11 +13,9 @@ import java.util.Optional;
 @Service
 public class ServicoDeTipoChamado {
     private RepositorioDeTipoChamado repoTipoChamado;
-    private RepositorioDeMotivo repositorioDeMotivo;
 
-    public ServicoDeTipoChamado(RepositorioDeTipoChamado repoTipoChamado, RepositorioDeMotivo repositorioDeMotivo) {
+    public ServicoDeTipoChamado(RepositorioDeTipoChamado repoTipoChamado) {
         this.repoTipoChamado = repoTipoChamado;
-        this.repositorioDeMotivo = repositorioDeMotivo;
     }
 
     /**
@@ -51,5 +50,15 @@ public class ServicoDeTipoChamado {
 
     public List<TipoChamado> findAllTipoChamado() {
         return repoTipoChamado.findAll();
+    }
+
+    /**
+     * Resgata o tipo de chamado baseado no seu ID. Se ele não for encontrado, aciona uma resposta 404.
+     */
+    public TipoChamado findById(String id){
+        Optional<TipoChamado> tipoChamadoOptional = repoTipoChamado.findById(id);
+        if (tipoChamadoOptional.isEmpty()) throw new EntityNotFoundException("TipoChamado de id %s não econtrado.".formatted(id));
+
+        return tipoChamadoOptional.get();
     }
 }
