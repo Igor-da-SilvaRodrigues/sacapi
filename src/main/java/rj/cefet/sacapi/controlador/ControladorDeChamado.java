@@ -7,10 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import rj.cefet.sacapi.dto.*;
 import rj.cefet.sacapi.enums.Status;
 import rj.cefet.sacapi.modelo.*;
-import rj.cefet.sacapi.servico.ServicoDeChamado;
-import rj.cefet.sacapi.servico.ServicoDeDiscente;
-import rj.cefet.sacapi.servico.ServicoDeSetor;
-import rj.cefet.sacapi.servico.ServicoDeTipoChamado;
+import rj.cefet.sacapi.servico.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,11 +21,14 @@ public class ControladorDeChamado {
     private ServicoDeTipoChamado servicoDeTipoChamado;
     private ServicoDeDiscente servicoDeDiscente;
     private ServicoDeSetor servicoDeSetor;
+    private ServicoDeHistorico servicoDeHistorico;
 
-    public ControladorDeChamado(ServicoDeChamado servicoDeChamado, ServicoDeTipoChamado servicoDeTipoChamado, ServicoDeDiscente servicoDeDiscente) {
+    public ControladorDeChamado(ServicoDeChamado servicoDeChamado, ServicoDeTipoChamado servicoDeTipoChamado, ServicoDeDiscente servicoDeDiscente, ServicoDeSetor servicoDeSetor, ServicoDeHistorico servicoDeHistorico) {
         this.servicoDeChamado = servicoDeChamado;
         this.servicoDeTipoChamado = servicoDeTipoChamado;
         this.servicoDeDiscente = servicoDeDiscente;
+        this.servicoDeSetor = servicoDeSetor;
+        this.servicoDeHistorico = servicoDeHistorico;
     }
 
     @PostMapping
@@ -47,7 +47,7 @@ public class ControladorDeChamado {
         chamado.setMotivo(new Motivo(chamadoPostDto.idMotivo(), tipoChamado));
         chamado.setDiscente(discente);
         chamado.setJustificativa(chamadoPostDto.justificativa());
-
+        chamado.setStatus(Status.ABERTO.value);
         var retorno = servicoDeChamado.salvar(chamado);
         return ResponseEntity.ok().body(ChamadoPostResposeDto.fromChamado(retorno));
     }
@@ -74,7 +74,10 @@ public class ControladorDeChamado {
             changed = true;
         }
 
-        if (changed) servicoDeChamado.salvar(chamado);
+        if (changed) {
+            servicoDeChamado.salvar(chamado);
+            servicoDeHistorico.criarHistoricoDeChamado(chamado);
+        }
         return ResponseEntity.ok().build();
     }
 
