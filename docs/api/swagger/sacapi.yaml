@@ -21,6 +21,9 @@ tags:
   - name: Chamado
     description: Operações com chamados
   
+  - name: Comentário
+    description: Operações com comentários
+  
   - name: TipoChamado
     description: Operações com tipos de chamadoss
   
@@ -297,6 +300,66 @@ paths:
         - sacAuth: []
         
   
+  /comentario:
+    post:
+      tags:
+        - Comentário
+      summary: Envia um comentário de um usuário para um chamado
+      description: ''
+      operationId: enviarComentario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ComentarioPost'
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComentarioPostResponse'
+        '403':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Usuario ou Chamado não encontrados
+        '400':
+          description: Chamado não admite comentários pois não está no estado 'retornado'
+      security:
+        - sacAuth: []
+  
+  /comentario/chamado/{idChamado}:
+    get:
+      tags:
+        - Comentário
+      summary: Retorna todos os comentários de um chamado
+      description: Retorna todos os comentários de um chamado em ordem decrescente (Novos primeiro)
+      operationId: getComentarioByChamado
+      parameters:
+        - name: idChamado
+          in: path
+          description: protocolo do chamado
+          required: true
+          schema:
+            type: string
+            example: 8999f69f-98ca-4ff9-9a93-1b7003199661
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ComentarioGetByChamado'
+        '403':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Chamado não encontrado
+      security:
+        - sacAuth: []
+        
   /tipochamado:
     post:
       tags:
@@ -684,6 +747,63 @@ components:
               type: string
               example: 2033-03-23
             
+    
+    ComentarioPost:
+      type: object
+      properties:
+        mensagem:
+          type: string
+          example: este é um comentário
+        matriculaUsuario:
+          type: string
+          example: af7c1fe6-d669-414e-b066-e9733f0de7a8
+        protocoloChamado:
+          type: string
+          example: 08c71152-c552-42e7-b094-f510ff44e9cb
+    
+    ComentarioPostResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: o id do comentario
+        mensagem:
+          type: string
+          example: este é um comentário
+        dataEnvio:
+          type: string
+          example: 2024-04-20T16:06:26.430876539
+        usuarioNome:
+          type: string
+          example: O nome do usuário
+        usuarioMatricula:
+          type: string
+          example: O id do usuário
+        chamadoProtocolo:
+          type: string
+          example: O id do chamado
+    
+    ComentarioGetByChamado:
+      type: object
+      properties:
+        id:
+          type: string
+          example: o id do comentario
+        mensagem:
+          type: string
+          example: este é um comentário
+        dataEnvio:
+          type: string
+          example: 2024-04-20T16:06:26.430876539
+        usuarioNome:
+          type: string
+          example: O nome do usuário
+        usuarioMatricula:
+          type: string
+          example: O id do usuário
+        chamadoProtocolo:
+          type: string
+          example: O id do chamado
     
     TipoChamadoPost:
       type: object
