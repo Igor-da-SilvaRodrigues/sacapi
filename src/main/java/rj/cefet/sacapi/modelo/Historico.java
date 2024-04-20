@@ -33,6 +33,7 @@ public class Historico {
      * @param chamado O chamado que será utilizado para criar o histórico.
      */
     public Historico(Chamado chamado){
+        this.id = UUID.randomUUID();
         this.chamado = chamado;
         this.motivo = chamado.getMotivo();
         this.tipoChamado = chamado.getTipoChamado();
