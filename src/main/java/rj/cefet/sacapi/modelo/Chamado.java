@@ -29,6 +29,9 @@ public class Chamado {
     private Discente discente;
     @OneToMany(mappedBy = "chamado")
     private List<Historico> historicos;
+
+    @OneToMany(mappedBy = "chamado")
+    private List<Comentario> comentarios;
     public Chamado() {
     }
 
@@ -129,6 +132,17 @@ public class Chamado {
         return historicos;
     }
 
+    public void setHistoricos(List<Historico> historicos) {
+        this.historicos = historicos;
+    }
+
+    public List<Comentario> getComentarios() {
+        return comentarios;
+    }
+
+    public void setComentarios(List<Comentario> comentarios) {
+        this.comentarios = comentarios;
+    }
 
     @Override
     public boolean equals(Object o) {
