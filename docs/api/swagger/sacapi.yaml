@@ -370,7 +370,7 @@ paths:
       tags:
         - Comentário
       summary: Retorna todos os comentários de um chamado
-      description: Retorna todos os comentários de um chamado em ordem decrescente (Novos primeiro)
+      description: Retorna todos os comentários de um chamado
       operationId: getComentarioByChamado
       parameters:
         - name: idChamado
@@ -380,6 +380,24 @@ paths:
           schema:
             type: string
             example: 8999f69f-98ca-4ff9-9a93-1b7003199661
+        - in: query
+          name: page
+          schema:
+            type: integer
+            example: 0
+          description: O número da página
+        - in: query
+          name: size
+          schema:
+            type: integer
+            example: 10
+          description: O tamanho da página
+        - in: query
+          name: sort
+          schema:
+            type: string
+            example: dataEnvio,desc
+          description: O item pelo qual ordenar o retorno, seguido pela ordem (crescente "asc" ou decrescente "desc")
       responses:
         '200':
           description: Sucesso

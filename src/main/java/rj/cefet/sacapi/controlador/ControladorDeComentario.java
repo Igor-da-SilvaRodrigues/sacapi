@@ -2,6 +2,7 @@ package rj.cefet.sacapi.controlador;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -51,8 +52,8 @@ public class ControladorDeComentario {
     }
 
     @GetMapping("/chamado/{idChamado}")
-    ResponseEntity<List<ComentarioGetByChamadoDto>> getComentarioByChamado(@PathVariable @NotBlank String idChamado){
+    ResponseEntity<List<ComentarioGetByChamadoDto>> getComentarioByChamado(@PathVariable @NotBlank String idChamado, Pageable pageable){
         Chamado chamado = servicoDeChamado.findById(idChamado);
-        return ResponseEntity.ok().body(servicoDeComentario.findByChamado(chamado).stream().map(ComentarioGetByChamadoDto::fromComentario).toList());
+        return ResponseEntity.ok().body(servicoDeComentario.findByChamado(chamado, pageable).map(ComentarioGetByChamadoDto::fromComentario).toList());
     }
 }

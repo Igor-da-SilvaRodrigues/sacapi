@@ -1,11 +1,11 @@
 package rj.cefet.sacapi.servico;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rj.cefet.sacapi.modelo.Chamado;
 import rj.cefet.sacapi.modelo.Comentario;
 import rj.cefet.sacapi.repositorio.RepositorioDeComentario;
-
-import java.util.List;
 
 @Service
 public class ServicoDeComentario {
@@ -19,7 +19,7 @@ public class ServicoDeComentario {
         return repositorioDeComentario.save(comentario);
     }
 
-    public List<Comentario> findByChamado(Chamado chamado){
-        return this.repositorioDeComentario.findByChamadoOrderByDataEnvioDesc(chamado);
+    public Page<Comentario> findByChamado(Chamado chamado, Pageable pageable){
+        return this.repositorioDeComentario.findByChamado(chamado, pageable);
     }
 }
