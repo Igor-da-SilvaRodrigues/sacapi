@@ -482,6 +482,25 @@ paths:
       summary: Retorna todos os tipos de chamados
       description: Retorna todos os tipos de chamados como uma lista de objetos
       operationId: findAllTipoChamado
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            example: 0
+          description: O número da página
+        - in: query
+          name: size
+          schema:
+            type: integer
+            example: 10
+          description: O tamanho da página
+        - in: query
+          name: sort
+          schema:
+            type: string
+            example: prioridade,asc
+          description: O item pelo qual ordenar o retorno, seguido pela ordem (crescente "asc" ou decrescente "desc")
       responses:
         '200':
           description: Sucesso
@@ -529,6 +548,25 @@ paths:
       summary: Retorna todos os chamados ativos
       description: Retorna todos os chamados ativos, isto é, não arquivados.
       operationId: findAllTiposAtivos
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            example: 0
+          description: O número da página
+        - in: query
+          name: size
+          schema:
+            type: integer
+            example: 10
+          description: O tamanho da página
+        - in: query
+          name: sort
+          schema:
+            type: string
+            example: prioridade,desc
+          description: O item pelo qual ordenar o retorno, seguido pela ordem (crescente "asc" ou decrescente "desc")
       responses:
         '200':
           description: Sucesso

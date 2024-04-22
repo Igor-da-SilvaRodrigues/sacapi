@@ -1,6 +1,8 @@
 package rj.cefet.sacapi.servico;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rj.cefet.sacapi.modelo.Motivo;
 import rj.cefet.sacapi.modelo.TipoChamado;
@@ -44,12 +46,12 @@ public class ServicoDeTipoChamado {
         return Optional.of(tipoChamadoArquivado);
     }
 
-    public List<TipoChamado> findTipoChamadoByArquivado(boolean arquivado){
-        return repoTipoChamado.findByArquivado(arquivado);
+    public Page<TipoChamado> findTipoChamadoByArquivado(boolean arquivado, Pageable pageable){
+        return repoTipoChamado.findByArquivado(arquivado, pageable);
     }
 
-    public List<TipoChamado> findAllTipoChamado() {
-        return repoTipoChamado.findAll();
+    public Page<TipoChamado> findAllTipoChamado(Pageable pageable) {
+        return repoTipoChamado.findAll(pageable);
     }
 
     /**
