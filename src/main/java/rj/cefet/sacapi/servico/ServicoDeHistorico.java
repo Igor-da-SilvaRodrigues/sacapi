@@ -1,5 +1,7 @@
 package rj.cefet.sacapi.servico;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rj.cefet.sacapi.modelo.Chamado;
 import rj.cefet.sacapi.modelo.Historico;
@@ -20,7 +22,7 @@ public class ServicoDeHistorico {
         return repositorioDeHistorico.save(new Historico(chamado));
     }
 
-    public List<Historico> getHistoricosByChamado(Chamado chamado){
-        return repositorioDeHistorico.findByChamadoOrderByDataModDesc(chamado);
+    public Page<Historico> getHistoricosByChamado(Chamado chamado, Pageable pageable){
+        return repositorioDeHistorico.findByChamado(chamado, pageable);
     }
 }
