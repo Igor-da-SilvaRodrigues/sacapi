@@ -1,6 +1,7 @@
 package rj.cefet.sacapi.controlador;
 
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rj.cefet.sacapi.dto.HistoricoGetDto;
@@ -23,9 +24,9 @@ public class ControladorDeHistorico {
     }
 
     @GetMapping("/{protocolo}")
-    ResponseEntity<List<HistoricoGetDto>> findHistoricosByChamado(@PathVariable @NotBlank String protocolo){
+    ResponseEntity<List<HistoricoGetDto>> findHistoricosByChamado(@PathVariable @NotBlank String protocolo, Pageable pageable){
         Chamado chamado = servicoDeChamado.findById(protocolo);
 
-        return ResponseEntity.ok().body(servicoDeHistorico.getHistoricosByChamado(chamado).stream().map(HistoricoGetDto::fromHistorico).toList());
+        return ResponseEntity.ok().body(servicoDeHistorico.getHistoricosByChamado(chamado, pageable).map(HistoricoGetDto::fromHistorico).toList());
     }
 }

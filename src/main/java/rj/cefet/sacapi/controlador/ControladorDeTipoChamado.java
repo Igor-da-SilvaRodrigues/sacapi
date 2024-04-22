@@ -3,6 +3,7 @@ package rj.cefet.sacapi.controlador;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rj.cefet.sacapi.dto.TipoChamadoGetDto;
@@ -32,8 +33,8 @@ public class ControladorDeTipoChamado {
     }
 
     @GetMapping
-    ResponseEntity<List<TipoChamadoGetDto>> getAllTipoChamado(){
-        return ResponseEntity.ok().body(servicoDeTipoChamado.findAllTipoChamado().stream().map(TipoChamadoGetDto::fromTipoChamado).toList());
+    ResponseEntity<List<TipoChamadoGetDto>> getAllTipoChamado(Pageable pageable){
+        return ResponseEntity.ok().body(servicoDeTipoChamado.findAllTipoChamado(pageable).map(TipoChamadoGetDto::fromTipoChamado).toList());
     }
 
     @DeleteMapping("/{idTipoChamado}")
@@ -43,7 +44,7 @@ public class ControladorDeTipoChamado {
     }
 
     @GetMapping("/ativo")
-    ResponseEntity<List<TipoChamadoGetDto>> getTiposAtivos(){
-        return ResponseEntity.ok().body(servicoDeTipoChamado.findTipoChamadoByArquivado(false).stream().map(TipoChamadoGetDto::fromTipoChamado).toList());
+    ResponseEntity<List<TipoChamadoGetDto>> getTiposAtivos(Pageable pageable){
+        return ResponseEntity.ok().body(servicoDeTipoChamado.findTipoChamadoByArquivado(false, pageable).map(TipoChamadoGetDto::fromTipoChamado).toList());
     }
 }

@@ -1,6 +1,8 @@
 package rj.cefet.sacapi.servico;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rj.cefet.sacapi.modelo.Chamado;
 import rj.cefet.sacapi.modelo.Discente;
@@ -13,19 +15,19 @@ import java.util.Optional;
 @Service
 public class ServicoDeChamado {
     private RepositorioDeChamado repositorioDeChamado;
-    private RepositorioDeDiscente repositorioDeDiscente;
+    private ServicoDeDiscente servicoDeDiscente;
 
-    public ServicoDeChamado(RepositorioDeChamado repositorioDeChamado, RepositorioDeDiscente repositorioDeDiscente) {
+    public ServicoDeChamado(RepositorioDeChamado repositorioDeChamado, ServicoDeDiscente servicoDeDiscente) {
         this.repositorioDeChamado = repositorioDeChamado;
-        this.repositorioDeDiscente = repositorioDeDiscente;
+        this.servicoDeDiscente = servicoDeDiscente;
     }
 
     public Chamado salvar(Chamado chamado){
         return repositorioDeChamado.save(chamado);
     }
 
-    public List<Chamado> findAllChamados(){
-        return repositorioDeChamado.findAll();
+    public Page<Chamado> findAllChamados(Pageable pageable){
+        return repositorioDeChamado.findAll(pageable);
     }
     public Chamado findById(String protocolo){
         Optional<Chamado> chamadoOptional = repositorioDeChamado.findById(protocolo);
@@ -36,12 +38,8 @@ public class ServicoDeChamado {
     /**
      * Retorna todos os chamados de um usuário
      */
-    public List<Chamado> findByMatriculaDeDiscente(String matricula){
-        Optional<Discente> discenteOptional = repositorioDeDiscente.findById(matricula);
-        //retornar 404 se não encontrar discente
-        if (discenteOptional.isEmpty()) throw new EntityNotFoundException("Usuario de id %s não encontrado".formatted(matricula));
-        return discenteOptional.get().getChamados();
+    public Page<Chamado> findByMatriculaDeDiscente(String matricula, Pageable pageable){
+        Discente discente = servicoDeDiscente.findById(matricula);
+        return repositorioDeChamado.findByDiscente(discente, pageable);
     }
-
-
 }

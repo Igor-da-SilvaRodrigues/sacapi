@@ -1,6 +1,8 @@
 package rj.cefet.sacapi.servico;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rj.cefet.sacapi.modelo.Setor;
 import rj.cefet.sacapi.repositorio.RepositorioDeSetor;
@@ -16,8 +18,8 @@ public class ServicoDeSetor {
         this.repositorioDeSetor = repositorioDeSetor;
     }
 
-    public List<Setor> findAllSetores(){
-        return repositorioDeSetor.findAll();
+    public Page<Setor> findAllSetores(Pageable pageable){
+        return repositorioDeSetor.findAll(pageable);
     }
 
     public Setor salvar(Setor setor){

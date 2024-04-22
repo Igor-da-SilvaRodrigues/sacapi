@@ -58,6 +58,35 @@
         "summary": "Retorna todos os usuarios",
         "description": "Retorna todos os usuarios em uma lista de objetos",
         "operationId": "findAllUsuarios",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "example": 0
+            },
+            "description": "O número da página"
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer",
+              "example": 10
+            },
+            "description": "O tamanho da página"
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "string",
+              "example": "nome,asc"
+            },
+            "description": "O item pelo qual ordenar o retorno, seguido pela ordem (crescente \"asc\" ou decrescente \"desc\")"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Sucesso",
@@ -131,6 +160,35 @@
         "summary": "Retorna todos os setores",
         "description": "Retorna todos os setores na forma de uma lista de objetos",
         "operationId": "findAllSetores",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "example": 0
+            },
+            "description": "O número da página"
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer",
+              "example": 10
+            },
+            "description": "O tamanho da página"
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "string",
+              "example": "setor,desc"
+            },
+            "description": "O item pelo qual ordenar o retorno, seguido pela ordem (crescente \"asc\" ou decrescente \"desc\")"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Sucesso",
@@ -213,6 +271,33 @@
               "type": "string",
               "example": "49029304290-d"
             }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "example": 0
+            },
+            "description": "O número da página"
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer",
+              "example": 10
+            },
+            "description": "O tamanho da página"
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "string",
+              "example": "dataMod,desc"
+            },
+            "description": "O item pelo qual ordenar o retorno, seguido pela ordem (crescente \"asc\" ou decrescente \"desc\")"
           }
         ],
         "responses": {
@@ -334,6 +419,35 @@
         "summary": "Retorna todos os chamados",
         "description": "Este *endpoint* foi pensado para ser usado pelo administrador, e não possui informações muito úteis para um discente. use /chamado/usuario/{idUsuario} para resgatar informações relevantes para discentes",
         "operationId": "getAllChamados",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "example": 0
+            },
+            "description": "O número da página"
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer",
+              "example": 10
+            },
+            "description": "O tamanho da página"
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "string",
+              "example": "tipoChamado.prioridade,desc"
+            },
+            "description": "O item pelo qual ordenar o retorno, seguido pela ordem (crescente \"asc\" ou decrescente \"desc\")"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Sucesso",
@@ -422,6 +536,33 @@
               "type": "string",
               "example": "OIEMSDAF"
             }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "example": 0
+            },
+            "description": "O número da página"
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer",
+              "example": 10
+            },
+            "description": "O tamanho da página"
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "string",
+              "example": "tipoChamado.prioridade,desc"
+            },
+            "description": "O item pelo qual ordenar o retorno, seguido pela ordem (crescente \"asc\" ou decrescente \"desc\")"
           }
         ],
         "responses": {
@@ -504,7 +645,7 @@
           "Comentário"
         ],
         "summary": "Retorna todos os comentários de um chamado",
-        "description": "Retorna todos os comentários de um chamado em ordem decrescente (Novos primeiro)",
+        "description": "Retorna todos os comentários de um chamado",
         "operationId": "getComentarioByChamado",
         "parameters": [
           {
@@ -516,6 +657,33 @@
               "type": "string",
               "example": "8999f69f-98ca-4ff9-9a93-1b7003199661"
             }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "example": 0
+            },
+            "description": "O número da página"
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer",
+              "example": 10
+            },
+            "description": "O tamanho da página"
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "string",
+              "example": "dataEnvio,desc"
+            },
+            "description": "O item pelo qual ordenar o retorno, seguido pela ordem (crescente \"asc\" ou decrescente \"desc\")"
           }
         ],
         "responses": {
@@ -589,6 +757,35 @@
         "summary": "Retorna todos os tipos de chamados",
         "description": "Retorna todos os tipos de chamados como uma lista de objetos",
         "operationId": "findAllTipoChamado",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "example": 0
+            },
+            "description": "O número da página"
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer",
+              "example": 10
+            },
+            "description": "O tamanho da página"
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "string",
+              "example": "prioridade,asc"
+            },
+            "description": "O item pelo qual ordenar o retorno, seguido pela ordem (crescente \"asc\" ou decrescente \"desc\")"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Sucesso",
@@ -657,9 +854,38 @@
         "tags": [
           "TipoChamado"
         ],
-        "summary": "Retorna todos os chamados ativos",
-        "description": "Retorna todos os chamados ativos, isto é, não arquivados.",
+        "summary": "Retorna todos os tipos de chamado ativos",
+        "description": "Retorna todos os tipos de chamado ativos, isto é, não arquivados.",
         "operationId": "findAllTiposAtivos",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "example": 0
+            },
+            "description": "O número da página"
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer",
+              "example": 10
+            },
+            "description": "O tamanho da página"
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "string",
+              "example": "prioridade,desc"
+            },
+            "description": "O item pelo qual ordenar o retorno, seguido pela ordem (crescente \"asc\" ou decrescente \"desc\")"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Sucesso",

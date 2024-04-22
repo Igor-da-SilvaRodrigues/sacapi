@@ -1,6 +1,7 @@
 package rj.cefet.sacapi.controlador;
 
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rj.cefet.sacapi.dto.SetorGetDto;
@@ -20,9 +21,9 @@ public class ControladorDeSetor {
     }
 
     @GetMapping
-    public ResponseEntity<List<SetorGetDto>> getAllSetores(){
+    public ResponseEntity<List<SetorGetDto>> getAllSetores(Pageable pageable){
         return ResponseEntity.ok().body(
-                servicoDeSetor.findAllSetores().stream().map(SetorGetDto::fromSetor).toList()
+                servicoDeSetor.findAllSetores(pageable).map(SetorGetDto::fromSetor).toList()
         );
     }
 

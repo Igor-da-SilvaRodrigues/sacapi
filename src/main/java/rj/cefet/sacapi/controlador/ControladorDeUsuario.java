@@ -1,5 +1,6 @@
 package rj.cefet.sacapi.controlador;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,9 +23,9 @@ public class ControladorDeUsuario {
     }
 
     @GetMapping
-    public ResponseEntity<List<UsuarioGetDto>> getAllUsuarios(){
+    public ResponseEntity<List<UsuarioGetDto>> getAllUsuarios(Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK).body(
-                servicoDeUsuario.findAllUsuario().stream().map(UsuarioGetDto::fromUsuario).toList()
+                servicoDeUsuario.findAllUsuario(pageable).map(UsuarioGetDto::fromUsuario).toList()
         );
     }
 

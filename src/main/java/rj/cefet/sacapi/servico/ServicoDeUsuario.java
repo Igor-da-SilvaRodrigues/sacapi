@@ -1,5 +1,7 @@
 package rj.cefet.sacapi.servico;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -23,8 +25,8 @@ public class ServicoDeUsuario {
         this.repositorioDeUsuario = repositorioDeUsuario;
     }
 
-    public List<Usuario> findAllUsuario(){
-        return repositorioDeUsuario.findAll();
+    public Page<Usuario> findAllUsuario(Pageable pageable){
+        return repositorioDeUsuario.findAll(pageable);
     }
 
     public Optional<Usuario> findById(String id){
