@@ -39,6 +39,25 @@ paths:
       summary: Retorna todos os usuarios
       description: Retorna todos os usuarios em uma lista de objetos
       operationId: findAllUsuarios
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            example: 0
+          description: O número da página
+        - in: query
+          name: size
+          schema:
+            type: integer
+            example: 10
+          description: O tamanho da página
+        - in: query
+          name: sort
+          schema:
+            type: string
+            example: nome,asc
+          description: O item pelo qual ordenar o retorno, seguido pela ordem (crescente "asc" ou decrescente "desc")
       responses:
         '200':
           description: Sucesso
@@ -545,8 +564,8 @@ paths:
     get:
       tags:
         - TipoChamado
-      summary: Retorna todos os chamados ativos
-      description: Retorna todos os chamados ativos, isto é, não arquivados.
+      summary: Retorna todos os tipos de chamado ativos
+      description: Retorna todos os tipos de chamado ativos, isto é, não arquivados.
       operationId: findAllTiposAtivos
       parameters:
         - in: query
