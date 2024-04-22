@@ -2,6 +2,8 @@ package rj.cefet.sacapi.controlador;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rj.cefet.sacapi.dto.*;
@@ -82,8 +84,9 @@ public class ControladorDeChamado {
     }
 
     @GetMapping
-    ResponseEntity<List<ChamadoGetDto>> getAllChamados(){
-        return ResponseEntity.ok().body(servicoDeChamado.findAllChamados().stream().map(ChamadoGetDto::fromChamado).toList());
+    ResponseEntity<List<ChamadoGetDto>> getAllChamados(Pageable pageable){
+
+        return ResponseEntity.ok().body(servicoDeChamado.findAllChamados(pageable).map(ChamadoGetDto::fromChamado).toList());
     }
 
     @GetMapping("/{idChamado}")
@@ -92,7 +95,7 @@ public class ControladorDeChamado {
     }
 
     @GetMapping("/usuario/{idUsuario}")
-    ResponseEntity<List<ChamadoGetByUsuarioDto>> getAllChamadosByUsuario(@PathVariable String idUsuario){
-        return ResponseEntity.ok().body(servicoDeChamado.findByMatriculaDeDiscente(idUsuario).stream().map(ChamadoGetByUsuarioDto::fromChamado).toList());
+    ResponseEntity<List<ChamadoGetByUsuarioDto>> getAllChamadosByUsuario(@PathVariable String idUsuario, Pageable pageable){
+        return ResponseEntity.ok().body(servicoDeChamado.findByMatriculaDeDiscente(idUsuario, pageable).map(ChamadoGetByUsuarioDto::fromChamado).toList());
     }
 }
