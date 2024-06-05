@@ -80,6 +80,7 @@ public class ControladorDeChamado {
         }
 
         if (changed) {
+            chamado.setDataMod(LocalDateTime.now());
             servicoDeChamado.salvar(chamado);
             servicoDeHistorico.criarHistoricoDeChamado(chamado);
         }
