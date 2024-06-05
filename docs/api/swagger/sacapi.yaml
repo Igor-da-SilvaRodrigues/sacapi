@@ -916,12 +916,24 @@ components:
         dataAbertura:
           type: string
           example: 2008-08-08
+        dataFechamento: 
+          type: string
+          example: 2009-12-22
         status:
           type: integer
           example: 1
         prioridade: 
           type: integer
           example: 2
+        aluno: 
+          type: string
+          example: fulano
+        matricula: 
+          type: string
+          example: DIOFMAWEODKMW
+        dataMod: 
+          type: string
+          example: 2024-06-04T22:26:34.769302
     
     ChamadoGetDiscente:
       type: object
