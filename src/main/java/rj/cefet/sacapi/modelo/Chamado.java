@@ -23,6 +23,8 @@ public class Chamado {
     private Setor setor;
     @Column(name = "data_abertura")
     private LocalDateTime dataAbertura;
+    @Column(name = "data_mod")
+    private LocalDateTime dataMod;
     @Column(name = "data_fechamento")
     private LocalDateTime dataFechamento;
     @ManyToOne
@@ -33,6 +35,14 @@ public class Chamado {
     @OneToMany(mappedBy = "chamado")
     private List<Comentario> comentarios;
     public Chamado() {
+    }
+
+    public LocalDateTime getDataMod() {
+        return dataMod;
+    }
+
+    public void setDataMod(LocalDateTime dataMod) {
+        this.dataMod = dataMod;
     }
 
     public String getProtocolo() {

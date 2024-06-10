@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rj.cefet.sacapi.dto.*;
@@ -11,7 +12,9 @@ import rj.cefet.sacapi.enums.Status;
 import rj.cefet.sacapi.modelo.*;
 import rj.cefet.sacapi.servico.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -77,6 +80,7 @@ public class ControladorDeChamado {
         }
 
         if (changed) {
+            chamado.setDataMod(LocalDateTime.now());
             servicoDeChamado.salvar(chamado);
             servicoDeHistorico.criarHistoricoDeChamado(chamado);
         }
@@ -87,6 +91,31 @@ public class ControladorDeChamado {
     ResponseEntity<List<ChamadoGetDto>> getAllChamados(Pageable pageable){
 
         return ResponseEntity.ok().body(servicoDeChamado.findAllChamados(pageable).map(ChamadoGetDto::fromChamado).toList());
+    }
+
+    /**
+     *
+     * @param status
+     * @param dataInicio Representa a data mais <strong>antiga</strong>. Apenas chamados mais recentes que esta data serão retornados
+     * @param dataFim Representa a data mais <strong>recente</strong>. Apenas chamados mais antigos que esta data serão retornados. Caso não seja especificada, significa "a partir do presente".
+     * @param pageable
+     * @return
+     */
+    @GetMapping("/byStatusAndDataAbertura")
+    ResponseEntity<List<ChamadoGetDto>> getChamadoByStatusAndDataAbertura(
+            @RequestParam Integer status,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataInicio,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataFim,
+            Pageable pageable){
+
+            //queremos que as comparações sejam INCLUSIVAS,
+            //portanto a data inicial é comparada usando o início do dia, para incluir todos os horários dentro do dia
+            var dataInicio1 = dataInicio != null ? dataInicio.atStartOfDay() : null;
+            //e a data final é comparada usando o final do dia, para incluir todos os horários dentro do dia.
+            var dataFim1 = dataFim != null ? dataFim.atTime(23,59,59): null;
+            //a solução ideal seria mudar tudo para LocalDate, ao invés de dateTime, mas agr vai dar mt trabalho. Deixa pro futuro.
+
+        return ResponseEntity.ok().body(servicoDeChamado.findChamadoByStatusAndDataAbertura(status, dataInicio1, dataFim1, pageable).map(ChamadoGetDto::fromChamado).toList());
     }
 
     @GetMapping("/{idChamado}")

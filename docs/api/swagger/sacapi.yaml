@@ -391,7 +391,66 @@ paths:
       security:
         - sacAuth: []
         
-  
+  /chamado/byStatusAndDataAbertura:
+    get:
+      tags:
+        - Chamado
+      summary: Retorna todos os chamados em um determinado status, filtrados por data de abertura 
+      description: Retorna todos os chamados em um determinado status, filtrados por data de abertura. Um período deve ser especificado, apenas chamados abertos dentro deste período são retornados. O período é especificado por uma data de início e uma data de fim. A data de fim representa o momento mais **recente**, enquanto a data de início representa o momento mais **antigo**. Caso a data de fim não seja especificada, não haverá limite superior. E caso a data de início não seja especificada, não haverá limite inferior. Caso nenhuma data seja especificada, não haverá limite algum, e todos os chamados em determinado status serão retornados em formato de lista. **O período é inclusívo em ambos os limites**.
+      operationId: getChamadoByStatusAndDataAbertura
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            example: 0
+          description: O número da página
+        - name: size
+          in: query
+          schema:
+            type: integer
+            example: 10
+          description: O tamanho da página
+        - name: sort
+          in: query
+          schema:
+            type: string
+            example: dataAbertura,desc
+          description: O item pelo qual ordernar o retorno, seguido pela ordem (crescente "asc" ou decrescente "desc")
+        - name: status
+          in: query
+          required: true
+          schema:
+            type: integer
+            example: 1
+          description: O status dos chamados que deseja resgatar
+        - name: dataInicio
+          in: query
+          schema:
+            type: string
+            example: 2024-05-12
+          description: A data de menor valor do período (inclusivo)
+        - name: dataFim
+          in: query
+          schema:
+            type: string
+            example: 2024-05-13
+          description: A data de maior valor do período (inclusivo)
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChamadoGetAdmin'
+        '403':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          description: status não fornecido
+      security:
+        - sacAuth: []
   /comentario:
     post:
       tags:
@@ -857,12 +916,24 @@ components:
         dataAbertura:
           type: string
           example: 2008-08-08
+        dataFechamento: 
+          type: string
+          example: 2009-12-22
         status:
           type: integer
           example: 1
         prioridade: 
           type: integer
           example: 2
+        aluno: 
+          type: string
+          example: fulano
+        matricula: 
+          type: string
+          example: DIOFMAWEODKMW
+        dataMod: 
+          type: string
+          example: 2024-06-04T22:26:34.769302
     
     ChamadoGetDiscente:
       type: object
