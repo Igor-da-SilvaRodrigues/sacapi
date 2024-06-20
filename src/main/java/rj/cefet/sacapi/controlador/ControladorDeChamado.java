@@ -54,6 +54,7 @@ public class ControladorDeChamado {
         chamado.setJustificativa(chamadoPostDto.justificativa());
         chamado.setStatus(Status.ABERTO.value);
         var retorno = servicoDeChamado.salvar(chamado);
+        servicoDeHistorico.criarHistoricoDeChamado(chamado);
         return ResponseEntity.ok().body(ChamadoPostResposeDto.fromChamado(retorno));
     }
 
